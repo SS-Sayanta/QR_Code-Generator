@@ -1,0 +1,131 @@
+<!-- Updated index.html with scrollable Large/Small option fix + previous buttons -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Modern QR Generator</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-black min-h-screen text-white p-6">
+
+  <div class="max-w-4xl mx-auto glass p-8 rounded-3xl shadow-xl">
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-6 animate-fade">⚡ Modern QR Code Generator</h1>
+
+    <form id="qrForm" action="/generate" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+      <div>
+        <label class="font-semibold">QR Type</label>
+        <select id="qr_type" name="qr_type" onchange="switchType()" class="input-box mt-2">
+          <option value="event">Event / Calendar</option>
+          <option value="location">Location</option>
+          <option value="phone">Phone</option>
+          <option value="sms">SMS</option>
+          <option value="text">Text</option>
+          <option value="url">URL</option>
+          <option value="wifi">Wi-Fi</option>
+          <option value="vcard">vCard</option>
+          <option value="email">Email</option>
+        </select>
+      </div>
+
+      <!-- Text input -->
+      <div id="text_box">
+        <label>Text</label>
+        <input name="text_data" class="input-box" placeholder="Write text to encode">
+      </div>
+
+      <!-- Other QR types hidden initially -->
+      <div id="url_box" class="hidden">
+        <label>URL</label>
+        <input name="url_data" class="input-box" placeholder="https://example.com">
+      </div>
+      <div id="wifi_box" class="hidden space-y-2">
+        <input name="ssid" class="input-box" placeholder="WiFi SSID">
+        <input name="password" class="input-box" placeholder="Password">
+        <select name="security" class="input-box">
+          <option value="WPA">WPA/WPA2</option>
+          <option value="WEP">WEP</option>
+        </select>
+      </div>
+      <div id="vcard_box" class="hidden space-y-2">
+        <input name="name" class="input-box" placeholder="Full Name">
+        <input name="phone" class="input-box" placeholder="Phone">
+        <input name="email" class="input-box" placeholder="Email">
+      </div>
+      <div id="email_box" class="hidden space-y-2">
+        <input name="email_to" class="input-box" placeholder="To">
+        <input name="subject" class="input-box" placeholder="Subject">
+        <input name="msg" class="input-box" placeholder="Message">
+      </div>
+
+      <!-- Size select with scroll fix -->
+      <div class="relative z-50">
+        <label>Size</label>
+        <select name="size" class="input-box w-full">
+          <option value="8">Small</option>
+          <option value="10" selected>Medium</option>
+          <option value="15">Large</option>
+        </select>
+      </div>
+
+      <!-- Colors -->
+      <div class="grid grid-cols-3 gap-3">
+        <input type="color" name="color" class="w-full h-12 rounded-lg">
+        <input type="color" name="bg" class="w-full h-12 rounded-lg">
+        <!-- Size select already above -->
+      </div>
+
+      <!-- Logo upload -->
+      <input type="file" name="logo" accept="image/*" class="input-box">
+
+      <!-- Generate button -->
+      <button type="submit" class="w-full bg-blue-600 py-3 text-lg rounded-xl hover:bg-blue-700 animate-btn">Generate QR</button>
+    </form>
+
+    <!-- Download PNG -->
+    <div id="downloadArea" class="text-center mt-6 hidden animate-pop">
+      <a id="downloadBtn" href="#" download="qr.png" class="bg-green-600 px-6 py-3 rounded-xl text-lg hover:bg-green-700 inline-block animate-btn">Download QR</a>
+    </div>
+
+    <!-- Preview image -->
+    <img id="qrPreview" class="mx-auto mt-6 hidden rounded-xl shadow-xl animate-pop" width="250" />
+
+    <!-- Optional: Download SVG button -->
+    <a id="downloadSvgBtn" href="#" download="qr.svg" class="bg-purple-600 px-6 py-3 rounded-xl hover:bg-purple-700 inline-block animate-btn hidden mt-4">Download SVG</a>
+
+    <!-- Optional: Copy to clipboard -->
+    <button id="copyBtn" class="bg-yellow-500 px-6 py-3 rounded-xl hover:bg-yellow-600 animate-btn hidden mt-4">Copy QR Data</button>
+
+  </div>
+  <!-- EVENT QR -->
+<div id="eventFields" class="hidden">
+  <input type="text" id="eventTitle" placeholder="Event Title">
+  <input type="datetime-local" id="eventStart">
+  <input type="datetime-local" id="eventEnd">
+  <input type="text" id="eventLocation" placeholder="Location (optional)">
+</div>
+
+<!-- LOCATION QR -->
+<div id="locationFields" class="hidden">
+  <input type="text" id="latitude" placeholder="Latitude">
+  <input type="text" id="longitude" placeholder="Longitude">
+</div>
+
+<!-- PHONE QR -->
+<div id="phoneFields" class="hidden">
+  <input type="text" id="phoneNumber" placeholder="Phone Number">
+</div>
+
+<!-- SMS QR -->
+<div id="smsFields" class="hidden">
+  <input type="text" id="smsNumber" placeholder="SMS Number">
+  <input type="text" id="smsMessage" placeholder="Message">
+</div>
+
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
