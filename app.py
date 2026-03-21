@@ -76,8 +76,6 @@ def generate():
     buf.seek(0)
     return send_file(buf, mimetype="image/png", download_name="qr.png")
 
-if __name__ == "__main__":
-    app.run(debug=True)
 @app.route("/generate_svg", methods=["POST"])
 def generate_svg():
     qr_type = request.form.get("qr_type", "text")
@@ -96,3 +94,11 @@ def generate_svg():
     img.save(buf)
     buf.seek(0)
     return send_file(buf, mimetype="image/svg+xml", download_name="qr.svg")
+
+import os
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
+
+return send_file(...)
