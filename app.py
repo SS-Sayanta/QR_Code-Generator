@@ -78,23 +78,18 @@ def generate():
 
 @app.route("/generate_svg", methods=["POST"])
 def generate_svg():
-    qr_type = request.form.get("qr_type", "text")
-    # same data logic as PNG
-    data = ... # same as previous QR payload logic
-    qr = qrcode.QRCode(
-        version=None,
-        error_correction=qrcode.constants.ERROR_CORRECT_H,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(data)
-    qr.make(fit=True)
-    img = qr.make_image(image_factory=qrcode.image.svg.SvgImage)
+    data = request.form.get("text_data", "")
+
+    import qrcode.image.svg as svg
+    factory = svg.SvgImage
+
+    img = qrcode.make(data, image_factory=factory)
+
     buf = BytesIO()
     img.save(buf)
     buf.seek(0)
-    return send_file(buf, mimetype="image/svg+xml", download_name="qr.svg")
 
+    return send_file(buf, mimetype="image/svg+xml", download_name="qr.svg")
 import os
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
