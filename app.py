@@ -96,7 +96,6 @@ def generate_svg():
     return send_file(buf, mimetype="image/svg+xml", download_name="qr.svg")
 
 import os
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
